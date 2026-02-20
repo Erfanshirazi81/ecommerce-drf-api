@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+my_venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# Django stuff
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Migrations (اختیاری - اگر تیمی کار میکنی نگه دار)
+# */migrations/
+# !*/migrations/__init__.py
+
+# IDEs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Coverage & Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Celery
+celerybeat-schedule
+
+# Docker (اگر بعداً اضافه کردی)
+*.pid
+*.seed
