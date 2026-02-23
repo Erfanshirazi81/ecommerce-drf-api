@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'products.apps.ProductsConfig', 
     'django_filters',
     'orders.apps.OrdersConfig', 
+    'cart.apps.CartConfig', 
 ]
 
 MIDDLEWARE = [

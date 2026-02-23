@@ -1,10 +1,12 @@
 from rest_framework import serializers  
 from .models import Order, OrderItem    
 from django.db import transaction
+
 class OrderItemSerializer(serializers.ModelSerializer): 
     class Meta:
         model = OrderItem
         fields = ['product', 'quantity']
+
 
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True)
@@ -17,7 +19,6 @@ class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         items_data = validated_data.pop('items')
     
-
         with transaction.atomic():
             order = Order.objects.create(**validated_data)
             total_price = 0 
