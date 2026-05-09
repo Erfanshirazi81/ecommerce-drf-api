@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_filters',
     'orders.apps.OrdersConfig', 
     'cart.apps.CartConfig', 
+    'drf_spectacular_sidecar',
 ]
 
 MIDDLEWARE = [
@@ -145,4 +146,6 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'This is a simple e-commerce API built with Django REST Framework.',
     'VERSION': '1.0.0',
     # OTHER SETTINGS
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
 }
