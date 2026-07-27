@@ -1,41 +1,24 @@
-from rest_framework import serializers  
-from .models import Order, OrderItem    
-from django.db import transaction
+from rest_framework import serializers
+from .models import Order, OrderItem
 
-class OrderItemSerializer(serializers.ModelSerializer): 
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    """Read-only: OrderItems are only ever created internally during checkout,
+    never written directly by the client."""
+    product_name = serializers.CharField(source='product.name', read_only=True)
+
     class Meta:
         model = OrderItem
-        fields = ['product', 'quantity']
+        fields = ['id', 'product', 'product_name', 'quantity', 'price']
+        read_only_fields = fields
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True)
+    """Read-only: an Order is only ever created via the checkout action,
+    never via a plain POST with a client-supplied items list."""
+    items = OrderItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Order
-        fields = ["id", "items", "total_price", "status", "created_at"]
-        read_only_fields = ["total_price", "status", "created_at"]
-    
-    def create(self, validated_data):
-        items_data = validated_data.pop('items')
-    
-        with transaction.atomic():
-            order = Order.objects.create(**validated_data)
-            total_price = 0 
-            for item in items_data:
-                product = item['product']
-                quantity = item['quantity']
-                
-                if product.stock < quantity:
-                    raise serializers.ValidationError(f"Not enough stock for {product.name}. Available: {product.stock}")
-                
-                product.stock -= quantity
-                product.save()
-
-                price = product.price * quantity
-                total_price += price
-                OrderItem.objects.create(order=order, product=product, quantity=quantity, price=product.price)
-            order.total_price = total_price
-            order.save()
-        return order
-    
+        fields = ['id', 'items', 'total_price', 'status', 'created_at']
+        read_only_fields = fields
